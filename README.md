@@ -3,8 +3,8 @@ Introduction
 
 This is a simple Python app written to take exported text messages and output some cool facts about a conversations you've been having such as:
 
-Most frequently used words
-Response time (average, median)
+* Most frequently used words
+* Response time (average, median)
 
 and more to come as development continues!
 
