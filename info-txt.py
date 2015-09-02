@@ -30,6 +30,12 @@ def transcribe(root, party1, party2):
 	for sms in root.findall('sms'):
 		newSMS = SMS(sms.attrib['date'], sms.attrib['type'], sms.attrib['body'])
 		SMSlist.append(newSMS)
+		# Traverse the list backwards to find out when the sms was responded to
+		for prompt in reversed(SMSlist):
+			if prompt.party == sms.party:
+				break
+			else:
+				sms.responseTime = sms.date - prompt.date
 	return SMSlist
 
 def main(party1, party2):
