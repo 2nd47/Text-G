@@ -11,9 +11,9 @@ and more to come as development continues!
 Requirements
 ----------
 
-* An Android phone with the "SMS Backup & Restore" app which is available for free on the Play Store. Backup a single conversation. Retrieve the saved file from your phone and place it in the same directory as the program.
+* An Android phone with the "SMS Backup & Restore" app which is available for free on the Play Store. 
 
 How to use
 ----------
 
-Under construction.
+* Backup a single conversation without MMS. Retrieve the saved file from your phone and place it in the same directory as the program, making sure to rename it as "sms.xml". You can do whatever you want with the ".xsl" file.
