@@ -7,29 +7,36 @@ from dominate.tags import *
 
 # Interact with user machine
 import datetime
-import sys
+from sys import argv
 import os
 import time
 import webbrowser
 
-SMStree = 0
+second = 1000
+minute = 60000
+hour = 3600000
 
-def transcribe(root):
+class SMS:
+	'''base SMS class to store a single message'''
+	def __init__(self, date, party, message):
+		self.date = date
+		self.message = message
+		self.party = party
+		self.responseTime = 0
+
+def transcribe(root, party1, party2):
 	'''simplify the extracted SMS XML tree'''
-	newTree = ET.Element('smses')
+	SMSlist = []
 	for sms in root.findall('sms'):
-		tempSMS = ET.SubElement(newTree, 'sms')
-		if sms.attrib['date_sent'] == 0:
-			tempSMS.attrib['party'] = 0
-		else:
-			tempSMS.attrib['party'] = 1
-		tempSMS.attrib['date'] = sms.attrib['date']
-		tempSMS.attrib['body'] = sms.attrib['body']
-	return root
+		newSMS = SMS(sms.attrib['date'], sms.attrib['type'], sms.attrib['body'])
+		SMSlist.append(newSMS)
+	return SMSlist
 
-def main():
+def main(party1, party2):
 	'''main function that executes program function'''
-	global SMStree = transcribe(ET.parse('sms.xml'))
+	messages = transcribe(ET.parse('sms.xml').getroot(), party1, party2)
 
-if __name__ = 'main':
-	main()
+if __name__ == '__main__':
+	if (len(argv) < 3):
+		raise Exception('Please enter your name and then your friend\'s name')
+	main(argv[1], argv[2])
