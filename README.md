@@ -6,6 +6,7 @@ This is a simple Python app written to take exported text messages and output so
 * Most frequently used words
 * Response time (average, median)
 * Count of "I love you" messages and their alternatives in time chunks
+* Count of swearing
 
 Requirements
 ----------
