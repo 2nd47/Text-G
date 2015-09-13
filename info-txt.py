@@ -57,9 +57,23 @@ def transcribe(root, party1, party2):
 		smsList.append(newSMS)
 	return smsList
 
+def frequencyChecker(messages):
+	'''determine most frequently used words, given an article list to ignore'''
+	freqDict = {}
+	pass
+
+def condenseWords(sms):
+	'''match similar words in an sms with pre-defined list'''
+	removeWords = [wordsList[0], 'a', 'an', 'and', 'the', 'i', 'we', 'us', 'for', 'with', 'am', 'are', 'is', 'he', 'she', 'they', 'have', 'has']
+	wordsList = [ 
+		['you', 'u'],
+		['love', 'luv', 'lub'] ]
+	pass
+
 def main(party1, party2):
 	'''main function that executes program function'''
 	messages = transcribe(ET.parse('sms.xml').getroot(), party1, party2)
+
 
 if __name__ == '__main__':
 	if (len(argv) < 3):
