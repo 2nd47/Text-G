@@ -3,10 +3,11 @@ Introduction
 
 This is a simple Python app written to take exported text messages and output some cool facts about a conversations you've been having such as:
 
-* Most frequently used words
-* Response time (average, median)
-* Count of "I love you" messages and their alternatives in time chunks
-* Count of swearing
+* Most frequently used words [by party]
+* Response time (average, median) [by party]
+* Count of "I love you" messages and their alternatives in time chunks [by party]
+* Count of swearing [by party]
+* Average length of SMS message [by party]
 
 Requirements
 ----------
