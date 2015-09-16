@@ -1,17 +1,12 @@
 # XML Parsing
 import xml.etree.ElementTree as ET
 
-# HTML output
-
 # Interact with user machine
-import codecs
-import datetime
+from enum import Enum
 import re
 import sys
 from sys import argv
 import os
-import time
-import webbrowser
 
 # Time in milliseconds
 second = 1000
@@ -47,41 +42,42 @@ class SMS:
 		returnStr += 'IN [' + str(self.responseTime) + ']'
 		return returnStr
 
-def transcribe(root, party1, party2):
+def transcribe(root, conversation):
 	'''simplify the extracted SMS XML tree'''
-	conversation = Conversation(party1, party2)
 	smsList = conversation.messages
 	for sms in root.findall('sms'):
 		date = int(sms.attrib['date'])
 		if (sms.attrib['type'] == '2'):
-			party = party1
+			party = conversation.parties[0]
 		elif (sms.attrib['type'] == '1'):
-			party = party2
+			party = conversation.parties[1]
 		# This is to be changed before final release to utf-8 support
 		body = str(sms.attrib['body']).encode('ascii', 'ignore')
 		newSMS = SMS(date, party, body)
 		# Traverse the list backwards,  look for most recent SMS
 		reversedMessages = reversed(smsList)
-		for sms in smsList:
-			print(sms)
-		input('test:')
 		for previousSMS in reversedMessages:
 			if previousSMS.party == newSMS.party:
 				break
 			else:
 				newSMS.responseTime = newSMS.date - previousSMS.date
 		smsList.append(newSMS)
-	return smsList
 
-def frequencyChecker(messages):
+def frequencyChecker(conversation):
 	'''determine most frequently used words, given an article list to ignore'''
-	for message in messages:
+	for message in conversation.messages:
 		pass
 
-def lengthChecker(messages):
+def lengthChecker(conversation):
 	'''check the lengths of sms messages'''
-	lengthDict = {}
-	pass
+	messageLengths = {}
+	messageCount = {}
+	for party in conversation.parties:
+		messageLengths[party] = []
+		for message in conversation.messages:
+			if party == message.party:
+				messageLengths[party].append(message.length)
+		messageCount[party] = len(messageLengths[party])
 
 ''' For consideration later
 def condenseWords(sms):
@@ -94,10 +90,10 @@ def condenseWords(sms):
 
 def main(party1, party2):
 	'''main function that executes program function'''
-	parties = [party1, party2]
-	messages = transcribe(ET.parse('sms.xml').getroot(), party1, party2)
-	frequencies = frequencyChecker(messages)
-	lengths = lengthChecker(messages)
+	conversation = Conversation(party1, party2)
+	messages = transcribe(ET.parse('sms.xml').getroot(), conversation)
+	frequencies = frequencyChecker(conversation)
+	lengths = lengthChecker(conversation)
 
 
 if __name__ == '__main__':
