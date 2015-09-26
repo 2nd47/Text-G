@@ -1,21 +1,21 @@
 # XML Parsing
 import xml.etree.ElementTree as ET
- 
+
 # NLP data analysis
 import nltk
 nltk.download()
 from nltk.corpus import stopwords
- 
+
 # Interact with user machine
 from enum import Enum
 import re
 import sys
 from sys import argv
 import os
- 
+
 # INCLUDE HOW MANY WISHES WERE MADE
 # INCLUDE LONGEST STREAK OF TEXT MESSAGES
- 
+
 # Time In Milliseconds
 class TIM(Enum):
 	''' Time in milliseconds'''
@@ -27,7 +27,7 @@ class TIM(Enum):
 	# 30d/mo; 365d/yr
 	MONTH = WEEK * 4 + DAY * 2,
 	YEAR = MONTH * 12 + DAY * 5,
- 
+
 class NLPAnalyze:
 	# REWORK IMMEDIATELY
 	# REWORK IMMEDIATELY
@@ -35,7 +35,7 @@ class NLPAnalyze:
 	'''all NLP analysis starts here'''
 	def __init__(self):
 		# Some basic regex
-		self.laugh = re.compile('[h[e|a]+[h[e|a]+]+]')
+		self.laugh = re.compile('[h[e|a]]{2,}')
 		self.love = re.compile('[l+[u|o]+v+e*]')
 		self.you = re.compile('[[y+o+u+]|u+]')
 		self.swear = re.compile('[f+[a|u]+[c|k]+] | [s+h+i+t+] | [c+u+n+t+]')
@@ -47,8 +47,8 @@ class NLPAnalyze:
 		[word for word in text if word not in cachedStopWords]
 		# text4.dispersion_plot(["citizens", "democracy", "freedom", "duties", "America"])
 		# Really cool feature to examine changes through time
- 
- 
+
+
 class ConvParty:
 	"""Store data for a conversation participant and their associated data
 	"""
@@ -60,7 +60,7 @@ class ConvParty:
 			'responseTime' : ConvData('responseTime'),
 			'timeToNext' : ConvData('timeToNext')
 		}
- 
+
 	def __getitem__(self, key):
 		'''index over the dataSet'''
 		if key == 'name':
@@ -68,16 +68,16 @@ class ConvParty:
 		if key in self.data:
 			return self.dataSet[key]
 				return None
- 
+
 	def __setitem__(self, idx, value):
 		'''index over the dataSet'''
 		if key in self.data:
 			self.dataSet[idx] = value
- 
+
 	def __str__(self):
 		returnStr = 'DATA FOR ' + self.name
 		return returnStr
- 
+
 	def addSMS(self, sms):
 		self['sms'] += sms
 		self['length'] += sms['length']
@@ -85,14 +85,14 @@ class ConvParty:
 				self['responseTime'] += sms['responseTime']
 		if sms['timeToNext'] > 0:
 				self['timeToNext'] += sms['timeToNext']
- 
+
 	def analyze(self):
 		print('Analyzing data for ' + self.name + '...')
 		for data in self.dataSet:
 				data.analyze()
 		# Do NLTK analysis here
- 
- 
+
+
 class ConvData:
 	"""Store conversation data associated with one particpant and one data type
 	"""
@@ -124,7 +124,7 @@ class ConvData:
 			self.stats['mode'] = mode(self.data)
 			self.stats['stdev'] = stdev(self.data)
 
- 
+
 class Conversation:
 	"""Store data for a conversation given two participants.
 		This will also store values for both participants combined
@@ -134,25 +134,25 @@ class Conversation:
 			'party1' : ConvParty(partyName1),
 			'party2' : ConvParty(partyName2),
 			'total' : ConvParty('total')}
- 
+
 	def __getitem__(self, key):
 		if key in self.parties:
 			return self.parties[key]
 		return None
- 
+
 	def __str__(self):
 		returnStr = 'Conversation between ' + party1 + ' and ' + party2
 		return returnStr
- 
+
 	def addSMS(self, sms):
 		self[sms[party]].addSMS(sms)
 		self['total'].addSMS(sms)
- 
+
 	def analyze(self):
 		for party in self.parties:
 			party.analyze()
- 
- 
+
+
 class SMS:
 	"""Store data for a single SMS
 		"""
@@ -167,27 +167,27 @@ class SMS:
 						'wish' : False
 		}
 		self._checkWish()
- 
+
 	def __getitem__(self, key):
 		if key in self.data:
 			return self.data[key]
 		return None
- 
+
 	def __setitem__(self, idx, value):
 		self.data[idx] = value
- 
+
 	def __str__(self):
 		returnStr = '[' + str(self.message) + '] '
 		returnStr += 'FROM [' + str(self.party) + '] '
 		returnStr += 'AT [' + str(self.date) + '] '
 		returnStr += 'IN [' + str(self.responseTime) + ']'
 		return returnStr
- 
+
 	def _checkWish():
 		'''check if a wish was made around 11:11/23:11 with this SMS'''
         pass
- 
- 
+
+
 def transcribe(root, conversation):
 	"""Parse ElementTree XML and fill conversation object with relevant data
 	"""
@@ -217,7 +217,7 @@ def transcribe(root, conversation):
 				newSMS[responseTime] = newSMS[date] - previousSMS[date]
 		conversation.addSMS(newSMS)
 		print('Successfully parsed ' + conversation['total']['sms'].count + ' messages!')
- 
+
 def main(party1, party2):
 	'''main function that executes program function'''
 	# Initialize conversation participants
@@ -230,7 +230,7 @@ def main(party1, party2):
 	# Perform analysis on the gathered SMS data
 	convo.analyze()
 	# Initialize graphics output
- 
+
 if __name__ == '__main__':
 	if (len(argv) < 3):
 		raise Exception('Please enter your name and then your contact\'s name')
